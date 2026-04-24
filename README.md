@@ -18,14 +18,17 @@
 
 ## 📦 Prerequisites
 
-- [Claude Code CLI](https://docs.anthropic.com/claude-code) ติดตั้งแล้ว (`claude --version`)
+- [Claude Code CLI](https://docs.anthropic.com/claude-code) + Claude Pro account
 - Python 3.10+ (สำหรับ preview server)
-- Browser ทั่วไป (Chrome/Edge/Safari)
+- Git (สำหรับ clone)
+- Browser ทั่วไป (Chrome/Edge/Firefox/Safari)
 - **ไม่ต้อง:** Figma paid plan (ใช้ screenshot เท่านั้น)
+
+**👉 ติดตั้งครั้งแรก:** อ่าน [SETUP.md](SETUP.md) (step-by-step 20 นาที) ก่อนเข้า workshop
 
 ---
 
-## 🚀 Quickstart (5 นาที)
+## 🚀 Quickstart (ถ้า setup เสร็จแล้ว)
 
 ### 1. Clone repo
 ```bash
@@ -46,6 +49,8 @@ python .claude/skills/mango-ui-builder/scripts/preview.py demos/src/rental_list.
 claude
 ```
 Claude จะ auto-load `mango-ui-builder` skill จาก `.claude/skills/`
+
+**ยังไม่ติดตั้ง Claude Code / Python?** → [SETUP.md](SETUP.md)
 
 ---
 
