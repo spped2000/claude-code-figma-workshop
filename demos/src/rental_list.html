@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>สัญญาเช่าทั้งหมด — Mango ERP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --primary: #E67E22;
+    --primary-dark: #D35400;
+    --sidebar-bg: #1C2833;
+    --sidebar-text: #ECF0F1;
+    --sidebar-hover: #2C3E50;
+    --content-bg: #F8F9FA;
+    --card-bg: #FFFFFF;
+    --border: #E5E7E9;
+    --success: #27AE60;
+    --warning: #F39C12;
+    --danger: #E74C3C;
+    --info: #3498DB;
+    --text-primary: #2C3E50;
+    --text-secondary: #566573;
+    --text-muted: #7F8C8D;
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+    --shadow-md: 0 4px 6px rgba(0,0,0,0.07);
+    --sidebar-w: 240px;
+    --header-h: 64px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Sarabun', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 14px;
+    line-height: 22px;
+    color: var(--text-primary);
+    background: var(--content-bg);
+  }
+  button { font-family: inherit; cursor: pointer; border: none; background: none; }
+  input, select { font-family: inherit; font-size: 14px; }
+
+  /* ===== Sidebar ===== */
+  .sidebar {
+    position: fixed; top: 0; left: 0;
+    width: var(--sidebar-w); height: 100vh;
+    background: var(--sidebar-bg); color: var(--sidebar-text);
+    display: flex; flex-direction: column;
+  }
+  .sidebar__brand {
+    padding: 20px 24px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .sidebar__brand h1 { font-size: 20px; font-weight: 700; color: var(--primary); }
+  .sidebar__brand small { font-size: 11px; color: var(--text-muted); }
+  .sidebar__nav { flex: 1; padding: 16px 0; overflow-y: auto; }
+  .nav-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 24px;
+    color: var(--sidebar-text); text-decoration: none;
+    font-size: 14px; transition: background 0.15s;
+  }
+  .nav-item:hover { background: var(--sidebar-hover); }
+  .nav-item.active { background: var(--primary); color: #fff; font-weight: 600; }
+  .nav-item .ico { width: 20px; text-align: center; }
+  .sidebar__footer { padding: 16px 0; border-top: 1px solid rgba(255,255,255,0.08); }
+
+  /* ===== Header ===== */
+  .header {
+    position: fixed; top: 0; left: var(--sidebar-w); right: 0;
+    height: var(--header-h);
+    background: #fff; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 32px; z-index: 10;
+  }
+  .breadcrumb { color: var(--text-secondary); font-size: 13px; }
+  .breadcrumb .sep { margin: 0 8px; color: var(--text-muted); }
+  .breadcrumb .current { color: var(--text-primary); font-weight: 600; }
+  .header__right { display: flex; align-items: center; gap: 16px; }
+  .search {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--content-bg); border: 1px solid var(--border);
+    border-radius: var(--radius-md); padding: 8px 12px; width: 280px;
+  }
+  .search input { border: none; outline: none; background: none; flex: 1; }
+  .icon-btn {
+    position: relative; width: 40px; height: 40px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: var(--radius-md); font-size: 18px;
+  }
+  .icon-btn:hover { background: var(--content-bg); }
+  .badge-dot {
+    position: absolute; top: 6px; right: 6px;
+    width: 8px; height: 8px; background: var(--danger); border-radius: 50%;
+  }
+  .avatar {
+    display: flex; align-items: center; gap: 10px;
+    padding: 6px 12px 6px 6px; border-radius: 999px;
+  }
+  .avatar:hover { background: var(--content-bg); }
+  .avatar__circle {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: var(--primary); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 600;
+  }
+  .placeholder { color: var(--text-muted); font-style: italic; }
+
+  /* ===== Main ===== */
+  .main {
+    margin-left: var(--sidebar-w);
+    padding-top: var(--header-h);
+    min-height: 100vh;
+  }
+  .container { max-width: 1440px; padding: 32px; }
+
+  .page-head {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    margin-bottom: 24px; flex-wrap: wrap; gap: 16px;
+  }
+  .page-head h1 { font-size: 28px; font-weight: 700; line-height: 36px; }
+  .page-head .sub { color: var(--text-secondary); font-size: 13px; margin-top: 4px; }
+  .btn-primary {
+    background: var(--primary); color: #fff;
+    padding: 10px 20px; border-radius: var(--radius-md);
+    font-weight: 600; font-size: 14px;
+    display: inline-flex; align-items: center; gap: 6px;
+    transition: background 0.15s;
+  }
+  .btn-primary:hover { background: var(--primary-dark); }
+
+  /* ===== KPI ===== */
+  .kpi-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 16px; margin-bottom: 24px;
+  }
+  .kpi {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); padding: 24px;
+    box-shadow: var(--shadow-sm);
+  }
+  .kpi__label { font-size: 13px; color: var(--text-secondary); margin-bottom: 8px; }
+  .kpi__value { font-size: 36px; font-weight: 700; line-height: 44px; }
+  .kpi__hint { font-size: 12px; color: var(--text-muted); margin-top: 6px; }
+  .kpi--active .kpi__value { color: var(--success); }
+  .kpi--warn .kpi__value { color: var(--warning); }
+  .kpi--revenue .kpi__value { color: var(--primary); }
+
+  /* ===== Filter bar ===== */
+  .filter-bar {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); padding: 16px 24px;
+    margin-bottom: 16px;
+    display: flex; flex-wrap: wrap; gap: 16px; align-items: center;
+  }
+  .filter-group { display: flex; align-items: center; gap: 8px; }
+  .filter-group label { font-size: 13px; color: var(--text-secondary); }
+  .filter-group select {
+    padding: 8px 12px; border: 1px solid var(--border);
+    border-radius: var(--radius-md); background: #fff; min-width: 180px;
+  }
+  .pill-group { display: flex; gap: 6px; flex-wrap: wrap; }
+  .pill {
+    padding: 6px 14px; border-radius: 999px;
+    border: 1px solid var(--border); background: #fff;
+    font-size: 13px; color: var(--text-secondary);
+    transition: all 0.15s;
+  }
+  .pill:hover { border-color: var(--primary); color: var(--primary); }
+  .pill.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+  .filter-bar .search { margin-left: auto; width: 240px; }
+
+  /* ===== Table ===== */
+  .table-card {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); overflow: hidden;
+    box-shadow: var(--shadow-sm);
+  }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { padding: 14px 20px; text-align: left; font-size: 14px; }
+  thead th {
+    background: var(--content-bg);
+    font-weight: 600; color: var(--text-secondary);
+    font-size: 12px; letter-spacing: 0.3px; text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+  }
+  tbody tr { border-bottom: 1px solid var(--border); transition: background 0.1s; }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: var(--content-bg); }
+  .code { font-weight: 600; color: var(--primary); }
+  .num { text-align: right; font-variant-numeric: tabular-nums; }
+  .status {
+    display: inline-block; padding: 4px 12px;
+    border-radius: 999px; font-size: 12px; font-weight: 600;
+  }
+  .status--ใช้งาน { background: rgba(39,174,96,0.12); color: var(--success); }
+  .status--หมดอายุ { background: rgba(243,156,18,0.12); color: var(--warning); }
+  .status--ยกเลิก { background: rgba(231,76,60,0.12); color: var(--danger); }
+
+  .empty {
+    padding: 48px 24px; text-align: center; color: var(--text-muted);
+  }
+
+  /* ===== Responsive ===== */
+  @media (max-width: 768px) {
+    .sidebar { transform: translateX(-100%); transition: transform 0.2s; }
+    .header { left: 0; padding: 0 16px; }
+    .main { margin-left: 0; }
+    .container { padding: 16px; }
+    .kpi-grid { grid-template-columns: 1fr; }
+    .search { display: none; }
+    .filter-bar .search { display: flex; width: 100%; margin-left: 0; }
+    table { font-size: 13px; }
+    th, td { padding: 10px 12px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ========== Sidebar ========== -->
+<aside class="sidebar">
+  <div class="sidebar__brand">
+    <h1>MANGO ERP</h1>
+    <small>v2.5.0</small>
+  </div>
+  <nav class="sidebar__nav">
+    <a href="#" class="nav-item"><span class="ico">🏠</span> หน้าหลัก</a>
+    <a href="#" class="nav-item"><span class="ico">🏗️</span> โครงการก่อสร้าง</a>
+    <a href="#" class="nav-item"><span class="ico">📋</span> BOQ</a>
+    <a href="#" class="nav-item"><span class="ico">📦</span> ทรัพยากร</a>
+    <a href="#" class="nav-item active"><span class="ico">🏢</span> สัญญาเช่า</a>
+    <a href="#" class="nav-item"><span class="ico">📊</span> รายงาน</a>
+  </nav>
+  <div class="sidebar__footer">
+    <a href="#" class="nav-item"><span class="ico">⚙️</span> ตั้งค่า</a>
+    <a href="#" class="nav-item"><span class="ico">⏻</span> ออกจากระบบ</a>
+  </div>
+</aside>
+
+<!-- ========== Header ========== -->
+<header class="header">
+  <div class="breadcrumb">
+    หน้าแรก <span class="sep">›</span>
+    <span class="current">สัญญาเช่า</span>
+  </div>
+  <div class="header__right">
+    <div class="search">
+      <span>🔍</span>
+      <input type="text" placeholder="ค้นหา..." aria-label="ค้นหา" />
+    </div>
+    <button class="icon-btn" aria-label="การแจ้งเตือน">
+      🔔<span class="badge-dot"></span>
+    </button>
+    <!-- TODO: populate from user session -->
+    <button class="avatar" aria-label="โปรไฟล์ผู้ใช้">
+      <span class="avatar__circle">?</span>
+      <span class="placeholder">[ชื่อผู้ใช้]</span>
+    </button>
+  </div>
+</header>
+
+<!-- ========== Main ========== -->
+<main class="main">
+  <div class="container">
+
+    <!-- Page head -->
+    <div class="page-head">
+      <div>
+        <h1>สัญญาเช่าทั้งหมด</h1>
+        <div class="sub">ข้อมูล ณ 22 เม.ย. 2569</div>
+      </div>
+      <button class="btn-primary" id="btn-create">+ สร้างสัญญาใหม่</button>
+    </div>
+
+    <!-- KPI -->
+    <div class="kpi-grid">
+      <div class="kpi kpi--active">
+        <div class="kpi__label">สัญญาใช้งาน</div>
+        <div class="kpi__value" id="kpi-active">0</div>
+        <div class="kpi__hint">สถานะ "ใช้งาน" ในระบบ</div>
+      </div>
+      <div class="kpi kpi--warn">
+        <div class="kpi__label">สัญญาใกล้หมดอายุ</div>
+        <div class="kpi__value" id="kpi-expiring">0</div>
+        <div class="kpi__hint">ภายใน 60 วัน (ก่อน 21 มิ.ย. 2569)</div>
+      </div>
+      <div class="kpi kpi--revenue">
+        <div class="kpi__label">รายได้เดือนนี้</div>
+        <div class="kpi__value" id="kpi-revenue">0</div>
+        <div class="kpi__hint">บาท / เดือน (รวมสัญญาใช้งาน)</div>
+      </div>
+    </div>
+
+    <!-- Filter bar -->
+    <div class="filter-bar">
+      <div class="filter-group">
+        <label for="f-type">ประเภทหน่วย:</label>
+        <select id="f-type">
+          <option value="all">ทั้งหมด</option>
+          <option value="คอนโด 1 ห้องนอน">คอนโด 1 ห้องนอน</option>
+          <option value="คอนโด 2 ห้องนอน">คอนโด 2 ห้องนอน</option>
+          <option value="ร้านค้า">ร้านค้า</option>
+          <option value="สำนักงาน">สำนักงาน</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <div class="pill-group" id="f-status">
+          <button class="pill active" data-status="all">ทั้งหมด</button>
+          <button class="pill" data-status="ใช้งาน">ใช้งาน</button>
+          <button class="pill" data-status="หมดอายุ">หมดอายุ</button>
+          <button class="pill" data-status="ยกเลิก">ยกเลิก</button>
+        </div>
+      </div>
+      <div class="search">
+        <span>🔍</span>
+        <input type="text" id="f-search" placeholder="ค้นหารหัสสัญญา/ผู้เช่า/หน่วย..." />
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="table-card">
+      <table>
+        <thead>
+          <tr>
+            <th>รหัสสัญญา</th>
+            <th>ผู้เช่า</th>
+            <th>หน่วย</th>
+            <th class="num">ค่าเช่า/เดือน (บาท)</th>
+            <th>วันหมดอายุ</th>
+            <th>สถานะ</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+
+  </div>
+</main>
+
+<script>
+  // ===== Data fetched at runtime from mock-data/rental_contract_MOCK.csv =====
+  // Edit CSV → refresh browser → data auto-updates (Rule 2b)
+  // Path is project-root-relative (preview.py serves from root)
+  const CSV_URL = '/mock-data/rental_contract_MOCK.csv';
+  let CONTRACTS = [];
+
+  function parseCSV(text) {
+    const lines = text.trim().split(/\r?\n/);
+    const headers = lines[0].split(',');
+    return lines.slice(1).map(line => {
+      const cells = line.split(',');
+      const row = Object.fromEntries(headers.map((h, i) => [h.trim(), (cells[i] || '').trim()]));
+      return {
+        code: row['รหัสสัญญา'],
+        tenant: row['ชื่อผู้เช่า'],
+        unit: row['รหัสหน่วย'],
+        unitType: row['ประเภทหน่วย'],
+        start: row['วันเริ่มสัญญา'],
+        end: row['วันสิ้นสุดสัญญา'],
+        rent: parseInt(row['ค่าเช่ารายเดือน'], 10) || 0,
+        status: row['สถานะ'],
+      };
+    });
+  }
+
+  const TODAY = new Date('2026-04-22');
+  const THAI_MONTHS = ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+
+  function formatThaiDate(iso) {
+    const d = new Date(iso);
+    return `${d.getDate()} ${THAI_MONTHS[d.getMonth()]} ${d.getFullYear() + 543}`;
+  }
+  function daysBetween(a, b) {
+    return Math.round((b - a) / 86400000);
+  }
+  function formatMoney(n) {
+    return n.toLocaleString('en-US');
+  }
+
+  // ===== KPI compute (called after data loaded) =====
+  function updateKPIs() {
+    const activeCount = CONTRACTS.filter(c => c.status === 'ใช้งาน').length;
+    const expiringCount = CONTRACTS.filter(c => {
+      if (c.status !== 'ใช้งาน') return false;
+      const days = daysBetween(TODAY, new Date(c.end));
+      return days >= 0 && days <= 60;
+    }).length;
+    const monthlyRevenue = CONTRACTS
+      .filter(c => c.status === 'ใช้งาน')
+      .reduce((sum, c) => sum + c.rent, 0);
+
+    document.getElementById('kpi-active').textContent = activeCount;
+    document.getElementById('kpi-expiring').textContent = expiringCount;
+    document.getElementById('kpi-revenue').textContent = formatMoney(monthlyRevenue);
+  }
+
+  // ===== Render table =====
+  const state = { type: 'all', status: 'all', q: '' };
+  const tbody = document.getElementById('tbody');
+
+  function render() {
+    const q = state.q.trim().toLowerCase();
+    const rows = CONTRACTS.filter(c => {
+      if (state.type !== 'all' && c.unitType !== state.type) return false;
+      if (state.status !== 'all' && c.status !== state.status) return false;
+      if (q && !(`${c.code} ${c.tenant} ${c.unit}`.toLowerCase().includes(q))) return false;
+      return true;
+    });
+
+    if (rows.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="6" class="empty">ไม่พบสัญญาที่ตรงกับเงื่อนไข</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = rows.map(c => `
+      <tr>
+        <td><span class="code">${c.code}</span></td>
+        <td>${c.tenant}</td>
+        <td>${c.unit}<div style="font-size:12px;color:var(--text-muted)">${c.unitType}</div></td>
+        <td class="num">${formatMoney(c.rent)}</td>
+        <td>${formatThaiDate(c.end)}</td>
+        <td><span class="status status--${c.status}">${c.status}</span></td>
+      </tr>
+    `).join('');
+  }
+
+  // ===== Filter wiring =====
+  document.getElementById('f-type').addEventListener('change', e => {
+    state.type = e.target.value; render();
+  });
+  document.querySelectorAll('#f-status .pill').forEach(p => {
+    p.addEventListener('click', () => {
+      document.querySelectorAll('#f-status .pill').forEach(x => x.classList.remove('active'));
+      p.classList.add('active');
+      state.status = p.dataset.status; render();
+    });
+  });
+  document.getElementById('f-search').addEventListener('input', e => {
+    state.q = e.target.value; render();
+  });
+  document.getElementById('btn-create').addEventListener('click', () => {
+    alert('TODO: เปิดฟอร์มสร้างสัญญาใหม่');
+  });
+
+  // ===== Bootstrap: fetch CSV → populate CONTRACTS → compute + render =====
+  fetch(CSV_URL)
+    .then(r => {
+      if (!r.ok) throw new Error(`CSV load failed: ${r.status}`);
+      return r.text();
+    })
+    .then(text => {
+      CONTRACTS = parseCSV(text);
+      updateKPIs();
+      render();
+    })
+    .catch(err => {
+      document.getElementById('tbody').innerHTML =
+        `<tr><td colspan="6" class="empty">⚠️ โหลดข้อมูลไม่สำเร็จ: ${err.message}</td></tr>`;
+      console.error(err);
+    });
+</script>
+</body>
+</html>

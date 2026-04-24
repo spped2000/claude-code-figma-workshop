@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.venv/
+venv/
+env/
+.pytest_cache/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Node (ถ้าใช้ npx serve)
+node_modules/
+npm-debug.log*
+
+# Workshop outputs (learners' generated files)
+demos/src/dashboard.html
+demos/src/dashboard_v2.html
+demos/src/contract_detail.html
+demos/src/user_profile.html
+# Keep rental_list.html (as reference)
+
+# Temporary
+*.log
+.tmp/
